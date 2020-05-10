@@ -17,17 +17,6 @@
     </div>
 </div>
 
-<div class="form-group form-group-sm row">
-    <label for="template" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.template')); ?></label>
-    <div class="col-lg-9 col-xl-6">
-        <select required name="template" class="form-control selectpicker file kt-selectpicker" data-actions-box="true" title="<?= ucfirst(lang('Core.choose_one_of_the_following')); ?>" id="template">
-            <option <?= $form->template  == "default" ? 'selected' : ''; ?> value="default">Standard</option>
-            <option <?= $form->template  == "code" ? 'selected' : ''; ?> value="code">Code</option>
-        </select>
-    </div>
-</div>
-
-
 <div class="form-group row kt-shape-bg-color-1">
     <label for="name" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.name')); ?>* : </label>
     <div class="col-lg-9 col-xl-6">
@@ -35,18 +24,10 @@
     </div>
 </div>
 
-<div class="form-group row kt-shape-bg-color-1">
-    <label for="sous_name" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.sous_name')); ?>* : </label>
+<div class="form-group row">
+    <label for="handle" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.handle')); ?>* : </label>
     <div class="col-lg-9 col-xl-6">
-        <?= form_input_spread('name_2', $form->_prepareLang(), 'id="name_2" class="form-control lang"', 'text', true); ?>
-    </div>
-</div>
-
-<div class="form-group row kt-shape-bg-color-1">
-    <label for="sous_name" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.slug')); ?>* : </label>
-    <div class="col-lg-9 col-xl-6">
-        <?= form_input_spread('slug', $form->_prepareLang(), 'id="slug" class="form-control lang"', 'text', true); ?>
-        <span class="form-text text-muted"><?= lang('Core.Voir la page :'); ?> <a target="_blank" href="<?= base_urlFront($form->slug); ?>"><?= base_urlFront($form->slug); ?></a></span>
+    <input type="text" name="handle"  value="<?= isset($form->handle) ? $form->handle : ""; ?>"  id="handles" class="form-control" required="" >
     </div>
 </div>
 
@@ -56,39 +37,34 @@
         <?= form_textarea_spread('description_short', $form->_prepareLang(), 'class="form-control lang"', true); ?>
     </div>
 </div>
+<div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-separator--space-lg"></div>
 
-<div class="form-group row kt-shape-bg-color-1">
-    <label for="description" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.description')); ?>* : </label>
+<div class="form-group row">
+    <label for="dimensions" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.dimensions')); ?>* : </label>
     <div class="col-lg-9 col-xl-6">
-        <?= form_textarea_spread('description', $form->_prepareLang(), 'id="description" class="form-control lang"', true, 'ckeditor'); ?>
+    <input type="text" name="dimensions"  value="<?= isset($form->dimensions) ? $form->dimensions : ""; ?>"  id="dimensions" class="form-control" required="" >
+    <span class="form-text text-muted"><?= lang('Core.Ex: 1920x1080'); ?> </span>
     </div>
 </div>
 
 <div class="form-group form-group-sm row">
-    <label class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.no_follow_no_index')); ?></label>
+    <label class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.transparent_mask')); ?></label>
     <div class="col-lg-9 col-xl-6">
         <span class="kt-switch kt-switch--icon">
             <label>
-                <input type="checkbox" <?= ($form->no_follow_no_index == true) ? 'checked="checked"' : ''; ?> name="no_follow_no_index" value="1">
+                <input type="checkbox" <?= ($form->transparent_mask == true) ? 'checked="checked"' : ''; ?> name="transparent_mask" value="1">
                 <span></span>
             </label>
         </span>
     </div>
 </div>
 
-<div class="form-group row kt-shape-bg-color-1">
-    <label for="meta_title" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.meta_title')); ?>* : </label>
+<div class="form-group row">
+    <label for="transparent_mask_color_bg" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.transparent_mask_color_bg')); ?>* : </label>
     <div class="col-lg-9 col-xl-6">
-        <?= form_input_spread('meta_title', $form->_prepareLang(), 'id="meta_title" class="form-control lang"', 'text', true); ?>
+    <input type="color" name="transparent_mask_color_bg"  value="<?= isset($form->transparent_mask_color_bg) ? $form->transparent_mask_color_bg : ""; ?>"  id="transparent_mask_color_bg" class="form-control">
+    <span class="form-text text-muted"><?= lang('Core.Ex: #000000'); ?> </span>
     </div>
 </div>
 
-<div class="form-group row kt-shape-bg-color-1">
-    <label for="meta_description" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.meta_description')); ?>* : </label>
-    <div class="col-lg-9 col-xl-6">
-        <?= form_input_spread('meta_description', $form->_prepareLang(), 'id="meta_description" class="form-control lang"', 'text', true); ?>
-    </div>
-</div>
-
-<?php if (!empty($form->id_page)) { ?> <?= form_hidden('id_page', $form->id_page); ?> <?php } ?>
-<?php if (!empty($form->handle)) { ?> <?= form_hidden('handle', $form->handle); ?> <?php } ?>
+<?php if (!empty($form->id_diaporama)) { ?> <?= form_hidden('id_diaporama', $form->id_diaporama); ?> <?php } ?>

@@ -5,7 +5,7 @@ namespace Adnduweb\Ci4_diaporama\Database\Seeds;
 use Adnduweb\Ci4_diaporama\Models\DiaporamaModel;
 use joshtronic\LoremIpsum;
 
-class diaporamaseeder extends \CodeIgniter\Database\Seeder
+class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
 {
     public function run()
     {
@@ -13,12 +13,14 @@ class diaporamaseeder extends \CodeIgniter\Database\Seeder
         // Define default project setting templates
         $rows = [
             [
-                'id_diaporama'            => 1,
-                'active'             => 1,
-                'no_follow_no_index' => 0,
-                'handle'             => null,
-                'order'              => 1,
-                'created_at'         => date('Y-m-d H:i:s'),
+                'id_diaporama'              => 1,
+                'active'                    => 1,
+                'handle'                    => 'diapo-1',
+                'dimensions'                => '1920|700',
+                'transparent_mask'          => 0,
+                'transparent_mask_color_bg' => '#000000',
+                'order'                     => 1,
+                'created_at'                => date('Y-m-d H:i:s'),
             ]
 
         ];
@@ -27,13 +29,7 @@ class diaporamaseeder extends \CodeIgniter\Database\Seeder
                 'id_diaporama'      => 1,
                 'id_lang'           => 1,
                 'name'              => 'Welcome to CodeIgniter',
-                'name_2'            => 'The small framework with powerful features',
-                'description_short' => $lipsum->sentence(),
-                'description'       => $lipsum->paragraphs(5),
-                'meta_title'        => $lipsum->sentence(),
-                'meta_description'  => $lipsum->sentence(),
-                'tags'              => 'test',
-                'slug'              => '/'
+                'description_short' => $lipsum->sentence()
             ]
 
         ];
