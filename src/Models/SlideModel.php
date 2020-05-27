@@ -32,12 +32,13 @@ class SlideModel extends Model
         $this->diaporama_slide_lang = $this->db->table('diaporamas_slides_langs');
     }
 
-    public function getSlidesByDiaporama(int $id_diaporama){
+    public function getSlidesByDiaporama(int $id_diaporama)
+    {
         //echo $this->tableLang ; exit;
         $instance = [];
         $this->diaporama_slide->select();
         $this->diaporama_slide->join($this->tableLang, $this->table . '.id_slide = ' . $this->tableLang . '.id_slide');
-        $this->diaporama_slide->where('deleted_at IS NULL AND id_lang=' . service('settings')->setting_id_lang);
+        $this->diaporama_slide->where('deleted_at IS NULL AND id_diaporama = ' . $id_diaporama . ' AND id_lang=' . service('settings')->setting_id_lang);
         $this->diaporama_slide->orderBy($this->table . '.order ASC');
         $slides = $this->diaporama_slide->get()->getResult();
         if (!empty($slides)) {
@@ -47,5 +48,4 @@ class SlideModel extends Model
         }
         return $instance;
     }
-
 }

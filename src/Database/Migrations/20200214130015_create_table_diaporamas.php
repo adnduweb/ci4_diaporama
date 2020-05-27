@@ -20,6 +20,7 @@ class Migration_create_table_diaporamas extends Migration
             'dimensions'                => ['type' => 'VARCHAR', 'constraint' => 48, 'null' => true],
             'transparent_mask'          => ['type' => 'INT', 'constraint' => 11, 'default' => 0],
             'transparent_mask_color_bg' => ['type' => 'VARCHAR', 'constraint' => 48, 'null' => true],
+            'bouton_diapo'              => ['type' => 'VARCHAR', 'constraint' => 255],
             'order'                     => ['type' => 'INT', 'constraint' => 11],
             'created_at'                => ['type' => 'DATETIME', 'null' => true],
             'updated_at'                => ['type' => 'DATETIME', 'null' => true],
@@ -35,10 +36,12 @@ class Migration_create_table_diaporamas extends Migration
 
 
         $fields = [
-            'id_diaporama'           => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
+            'id_diaporama'      => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
             'id_lang'           => ['type' => 'INT', 'constraint' => 11],
             'name'              => ['type' => 'VARCHAR', 'constraint' => 255],
+            'sous_name'         => ['type' => 'VARCHAR', 'constraint' => 255],
             'description_short' => ['type' => 'TEXT'],
+            'url_bouton_diapo'  => ['type' => 'VARCHAR', 'constraint' => 255],
         ];
 
         $this->forge->addField($fields);
@@ -91,7 +94,6 @@ class Migration_create_table_diaporamas extends Migration
         $this->forge->addKey('id_lang');
         $this->forge->addForeignKey('id_slide', 'diaporamas_slides', 'id_slide', false, 'CASCADE');
         $this->forge->createTable('diaporamas_slides_langs', true);
-
     }
 
     //--------------------------------------------------------------------

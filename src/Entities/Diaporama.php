@@ -64,19 +64,23 @@ class Diaporama extends Entity
             // print_r($this->tableLang);
             if (empty($this->tableLang)) {
                 $data = [
-                    'id_diaporama'           => $key,
+                    'id_diaporama'      => $key,
                     'id_lang'           => $k,
                     'name'              => $v['name'],
+                    'sous_name'         => $v['sous_name'],
                     'description_short' => $v['description_short'],
+                    'url_bouton_diapo'  => $v['url_bouton_diapo'],
                 ];
                 // Create the new participant
                 $builder->insert($data);
             } else {
                 $data = [
-                    'id_diaporama'           => $this->tableLang->id_diaporama,
+                    'id_diaporama'      => $this->tableLang->id_diaporama,
                     'id_lang'           => $this->tableLang->id_lang,
                     'name'              => $v['name'],
+                    'sous_name'         => $v['sous_name'],
                     'description_short' => $v['description_short'],
+                    'url_bouton_diapo'  => $v['url_bouton_diapo'],
                 ];
                 //print_r($data);
                 $builder->set($data);
@@ -180,7 +184,7 @@ class Diaporama extends Entity
                                 'bouton'          => $s['bouton'],
                                 'slug'            => $s['slug'],
                             ];
-                            
+
                             $builderSlidelang->insert($datalang);
                         } else {
                             $datalang = [
@@ -194,7 +198,7 @@ class Diaporama extends Entity
                                 'slug'            => $s['slug'],
                             ];
 
-                           
+
                             $builderSlidelang->set($datalang);
                             $builderSlidelang->where(['id_slide' => $slideOnly->id_slide, 'id_lang' => $k]);
                             $builderSlidelang->update();

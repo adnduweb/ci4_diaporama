@@ -73,7 +73,7 @@ class AdminDiaporamasController extends AdminController
             $this->data['form'] = $this->tableModel->where('id_diaporama', $id)->first();
             if (empty($this->data['form'])) {
                 Tools::set_message('danger', lang('Core.not_{0}_exist', [$this->item]), lang('Core.warning_error'));
-                return redirect()->to('/' . env('CI_SITE_AREA') . '/' . user()->id_company . '/public/diaporamas');
+                return redirect()->to('/' . env('CI_SITE_AREA') . '/public/diaporamas');
             }
             $this->data['form']->slides =  $this->getSlidesByDiaporama($id);
         }
@@ -96,6 +96,7 @@ class AdminDiaporamasController extends AdminController
         $diaporama = new Diaporama($this->request->getPost());
         $diaporama->active = isset($diaporama->active) ? 1 : 0;
         $diaporama->transparent_mask = isset($diaporama->transparent_mask) ? 1 : 0;
+        $diaporama->bouton_diapo = isset($diaporama->bouton_diapo) ? 1 : 0;
         $this->lang = $this->request->getPost('lang');
 
         if (!$this->tableModel->save($diaporama)) {
@@ -110,7 +111,7 @@ class AdminDiaporamasController extends AdminController
         // Success!
         Tools::set_message('success', lang('Core.save_data'), lang('Core.cool_success'));
         $redirectAfterForm = [
-            'url'                   => '/' . env('CI_SITE_AREA') . '/' . user()->id_company . '/public/diaporamas',
+            'url'                   => '/' . env('CI_SITE_AREA') . '/public/diaporamas',
             'action'                => 'edit',
             'submithandler'         => $this->request->getPost('submithandler'),
             'id'                    => $diaporama->id_diaporama,
@@ -128,6 +129,8 @@ class AdminDiaporamasController extends AdminController
         // Try to create the user
         $diaporama = new Diaporama($this->request->getPost());
         $diaporama->active = isset($diaporama->active) ? 1 : 0;
+        $diaporama->transparent_mask = isset($diaporama->transparent_mask) ? 1 : 0;
+        $diaporama->bouton_diapo = isset($diaporama->bouton_diapo) ? 1 : 0;
         $diaporama->handle = uniforme(trim($this->request->getPost('handle')));
 
         if (!$this->tableModel->save($diaporama)) {
@@ -143,7 +146,7 @@ class AdminDiaporamasController extends AdminController
         // Success!
         Tools::set_message('success', lang('Core.save_data'), lang('Core.cool_success'));
         $redirectAfterForm = [
-            'url'                   => '/' . env('CI_SITE_AREA') . '/' . user()->id_company . '/public/diaporamas',
+            'url'                   => '/' . env('CI_SITE_AREA') . '/public/diaporamas',
             'action'                => 'add',
             'submithandler'         => $this->request->getPost('submithandler'),
             'id'                    => $diaporamaId,
@@ -205,7 +208,8 @@ class AdminDiaporamasController extends AdminController
         }
     }
 
-    public function ajaxProcessDeleteSlide(){
+    public function ajaxProcessDeleteSlide()
+    {
         if ($value = $this->request->getPost('value')) {
             $this->tableSlideModel->delete(['id_slide' => $value]);
             return $this->respond(['status' => true, 'type' => 'success', 'message' => lang('Js.your_selected_records_have_been_deleted')], 200);
