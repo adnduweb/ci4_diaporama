@@ -20,7 +20,6 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
                 'transparent_mask'          => 0,
                 'transparent_mask_color_bg' => '#000000',
                 'bouton_diapo'              => 0,
-                'url_bouton_diapo'          => '',
                 'order'                     => 1,
                 'created_at'                => date('Y-m-d H:i:s')
             ]
@@ -32,7 +31,8 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
                 'id_lang'           => 1,
                 'name'              => 'Welcome to CodeIgniter',
                 'sous_name'         => 'Bonjour',
-                'description_short' => $lipsum->sentence()
+                'description_short' => $lipsum->sentence(),
+                'url_bouton_diapo'          => '',
             ]
 
         ];

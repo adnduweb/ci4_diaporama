@@ -5,14 +5,14 @@
     ?>
     <?php $id_slide = $id_slide ?? $slide->id_slide ?? '__i__'; //var_dump($id_slide); exit; 
     ?>
-    <?php $order    = (isset($order)) ? $order : ($slide->id_field != '') ? $slide->order : '__n__'; ?>
+    <?php $order    = ((isset($order)) ? $order : ($slide->id_field != '')) ? $slide->order : '__n__'; ?>
     <?php $media = ($slide->options) ? $slide->getAttrOptionsImage() : 'admin/bundle/images/medias/no-image.png'; ?>
     <div class="kt-portlet kt-portlet--height-fluid kt-portlet--collapse" id="kt_portlet_tools<?= $id_field; ?>">
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
                 <h3 class="kt-portlet__head-title">
                     <span class="image_une">
-                        <img src="http://startci44.lan/<?= $media; ?>" alt="image">
+                        <img src="<?= base_url(); ?>/<?= $media; ?>" alt="image">
                     </span>
                     <?= lang('Core.slide'); ?> <span class="numberSlide"><?= $order; ?></span>
                 </h3>
