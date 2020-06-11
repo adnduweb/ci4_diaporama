@@ -12,4 +12,4 @@ $locale = '/';
 if (service('Settings')->setting_activer_multilangue == true) {
     $locale = '/{locale}';
 }
-$routes->get($locale . '/(:segment)', 'FrontDiaporamasController::show/$1', ['namespace' => '\Adnduweb\Ci4_diaporama\Controllers\Front']);
+$routes->get($locale . '/diaporama', 'FrontDiaporamasController::show/$1', ['namespace' => '\Adnduweb\Ci4_diaporama\Controllers\Front']);

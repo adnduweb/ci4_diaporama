@@ -32,7 +32,7 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
                 'name'              => 'Welcome to CodeIgniter',
                 'sous_name'         => 'Bonjour',
                 'description_short' => $lipsum->sentence(),
-                'url_bouton_diapo'          => '',
+                'url_bouton_diapo'  => 'dispo',
             ]
 
         ];
