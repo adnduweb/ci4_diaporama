@@ -41,20 +41,20 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
         //$diaporamas = new DiaporamaModel();
         $db = \Config\Database::connect();
         foreach ($rows as $row) {
-            $page = $db->table('diaporamas')->where('id_diaporama', $row['id_diaporama'])->get()->getRow();
+            $page = $db->table('diaporama')->where('id_diaporama', $row['id_diaporama'])->get()->getRow();
             //print_r($page); exit;
             if (empty($page)) {
                 // No setting - add the row
-                $db->table('diaporamas')->insert($row);
+                $db->table('diaporama')->insert($row);
             }
         }
 
         foreach ($rowsLang as $rowLang) {
-            $pagelang = $db->table('diaporamas_langs')->where('id_diaporama', $rowLang['id_diaporama'])->get()->getRow();
+            $pagelang = $db->table('diaporama_lang')->where('id_diaporama', $rowLang['id_diaporama'])->get()->getRow();
 
             if (empty($pagelang)) {
                 // No setting - add the row
-                $db->table('diaporamas_langs')->insert($rowLang);
+                $db->table('diaporama_lang')->insert($rowLang);
             }
         }
 

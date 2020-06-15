@@ -12,9 +12,9 @@ class SlideModel extends Model
     protected $afterInsert        = ['auditInsert'];
     protected $afterUpdate        = ['auditUpdate'];
     protected $afterDelete        = ['auditDelete'];
-    protected $table              = 'diaporamas_slides';
-    protected $tableLang          = 'diaporamas_slides_langs';
-    protected $with               = ['diaporamas_slides_langs'];
+    protected $table              = 'diaporama_slide';
+    protected $tableLang          = 'diaporama_slide_lang';
+    protected $with               = ['diaporama_slide_lang'];
     protected $without            = [];
     protected $primaryKey         = 'id_slide';
     protected $returnType         = Slide::class;
@@ -28,8 +28,8 @@ class SlideModel extends Model
     public function __construct()
     {
         parent::__construct();
-        $this->diaporama_slide = $this->db->table('diaporamas_slides');
-        $this->diaporama_slide_lang = $this->db->table('diaporamas_slides_langs');
+        $this->diaporama_slide      = $this->db->table('diaporama_slide');
+        $this->diaporama_slide_lang = $this->db->table('diaporama_slide_lang');
     }
 
     public function getSlidesByDiaporama(int $id_diaporama)

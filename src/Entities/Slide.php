@@ -8,8 +8,8 @@ use App\Entities\Media;
 class Slide extends Entity
 {
     use \Tatter\Relations\Traits\EntityTrait;
-    protected $table          = 'diaporamas_slides';
-    protected $tableLang      = 'diaporamas_slides_langs';
+    protected $table          = 'diaporama_slide';
+    protected $tableLang      = 'diaporama_slide_lang';
     protected $primaryKey     = 'id_slide';
 
     protected $datamap = [];
@@ -34,12 +34,12 @@ class Slide extends Entity
 
     public function getNameLang(int $id_lang)
     {
-        foreach ($this->diaporamas_slides_langs as $lang) {
+        foreach ($this->diaporama_slide_lang as $lang) {
             if ($id_lang == $lang->id_lang) {
                 return $lang->name ?? null;
             }
         }
-    } 
+    }
 
     public function getAttrOptionsImage()
     {
@@ -67,11 +67,10 @@ class Slide extends Entity
     {
         $lang = [];
         if (!empty($this->id_slide)) {
-            foreach ($this->diaporamas_slides_langs as $tabs_lang) {
+            foreach ($this->diaporama_slide_lang as $tabs_lang) {
                 $lang[$tabs_lang->id_lang] = $tabs_lang;
             }
         }
         return $lang;
     }
-
 }

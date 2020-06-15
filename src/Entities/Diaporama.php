@@ -8,9 +8,9 @@ class Diaporama extends Entity
 {
     use \Tatter\Relations\Traits\EntityTrait;
     protected $table          = 'diaporamas';
-    protected $tableLang      = 'diaporamas_langs';
-    protected $tableSlide     = 'diaporamas_slides';
-    protected $tableSlideLang = 'diaporamas_slides_langs';
+    protected $tableLang      = 'diaporama_lang';
+    protected $tableSlide     = 'diaporama_slide';
+    protected $tableSlideLang = 'diaporama_slide_lang';
     protected $primaryKey     = 'id_diaporama';
 
     protected $datamap = [];
@@ -35,7 +35,7 @@ class Diaporama extends Entity
 
     public function getNameLang(int $id_lang)
     {
-        foreach ($this->diaporamas_langs as $lang) {
+        foreach ($this->diaporama_lang as $lang) {
             if ($id_lang == $lang->id_lang) {
                 return $lang->name ?? null;
             }
@@ -47,7 +47,7 @@ class Diaporama extends Entity
     {
         $lang = [];
         if (!empty($this->id_diaporama)) {
-            foreach ($this->diaporamas_langs as $tabs_lang) {
+            foreach ($this->diaporama_lang as $tabs_lang) {
                 $lang[$tabs_lang->id_lang] = $tabs_lang;
             }
         }

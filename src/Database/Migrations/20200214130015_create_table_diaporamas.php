@@ -4,7 +4,7 @@ namespace Adnduweb\Ci4_diaporama\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Migration_create_table_diaporamas extends Migration
+class Migration_create_table_diaporama extends Migration
 {
     public function up()
     {
@@ -32,7 +32,7 @@ class Migration_create_table_diaporamas extends Migration
         $this->forge->addKey('created_at');
         $this->forge->addKey('updated_at');
         $this->forge->addKey('deleted_at');
-        $this->forge->createTable('diaporamas');
+        $this->forge->createTable('diaporama');
 
 
         $fields = [
@@ -48,8 +48,8 @@ class Migration_create_table_diaporamas extends Migration
         // $this->forge->addKey(['id_item', 'id_lang'], false, true);
         $this->forge->addKey('id_item');
         $this->forge->addKey('id_lang');
-        $this->forge->addForeignKey('id_diaporama', 'diaporamas', 'id_diaporama', false, 'CASCADE');
-        $this->forge->createTable('diaporamas_langs', true);
+        $this->forge->addForeignKey('id_diaporama', 'diaporama', 'id_diaporama', false, 'CASCADE');
+        $this->forge->createTable('diaporama_lang', true);
 
         /************************************************************
          *
@@ -75,7 +75,7 @@ class Migration_create_table_diaporamas extends Migration
         $this->forge->addKey('created_at');
         $this->forge->addKey('updated_at');
         $this->forge->addKey('deleted_at');
-        $this->forge->createTable('diaporamas_slides');
+        $this->forge->createTable('diaporama_slide');
 
 
         $fields = [
@@ -92,17 +92,17 @@ class Migration_create_table_diaporamas extends Migration
         $this->forge->addField($fields);
         $this->forge->addKey('id_slide');
         $this->forge->addKey('id_lang');
-        $this->forge->addForeignKey('id_slide', 'diaporamas_slides', 'id_slide', false, 'CASCADE');
-        $this->forge->createTable('diaporamas_slides_langs', true);
+        $this->forge->addForeignKey('id_slide', 'diaporama_slide', 'id_slide', false, 'CASCADE');
+        $this->forge->createTable('diaporama_slide_lang', true);
     }
 
     //--------------------------------------------------------------------
 
     public function down()
     {
-        $this->forge->dropTable('diaporamas');
-        $this->forge->dropTable('diaporamas_langs');
-        $this->forge->dropTable('diaporamas_slides');
-        $this->forge->dropTable('diaporamas_slides_langs');
+        $this->forge->dropTable('diaporama');
+        $this->forge->dropTable('diaporama_lang');
+        $this->forge->dropTable('diaporama_slide');
+        $this->forge->dropTable('diaporama_slide_lang');
     }
 }
