@@ -70,7 +70,7 @@ class AdminDiaporamasController extends AdminController
         if (is_null($id)) {
             $this->data['form'] = new Diaporama($this->request->getPost());
         } else {
-            $this->data['form'] = $this->tableModel->where('id_diaporama', $id)->first();
+            $this->data['form'] = $this->tableModel->where('id', $id)->first();
             if (empty($this->data['form'])) {
                 Tools::set_message('danger', lang('Core.not_{0}_exist', [$this->item]), lang('Core.warning_error'));
                 return redirect()->to('/' . env('CI_SITE_AREA') . '/public/diaporamas');
@@ -103,7 +103,7 @@ class AdminDiaporamasController extends AdminController
             Tools::set_message('danger', $this->tableModel->errors(), lang('Core.warning_error'));
             return redirect()->back()->withInput();
         }
-        $diaporama->saveLang($this->lang, $diaporama->id_diaporama);
+        $diaporama->saveLang($this->lang, $diaporama->id);
 
         // On enregistre les slides
         $diaporama->saveSlide($this->request->getPost('slide'), $diaporama);
@@ -114,7 +114,7 @@ class AdminDiaporamasController extends AdminController
             'url'                   => '/' . env('CI_SITE_AREA') . '/public/diaporamas',
             'action'                => 'edit',
             'submithandler'         => $this->request->getPost('submithandler'),
-            'id'                    => $diaporama->id_diaporama,
+            'id'                    => $diaporama->id,
         ];
         $this->redirectAfterForm($redirectAfterForm);
     }
@@ -162,12 +162,12 @@ class AdminDiaporamasController extends AdminController
                 foreach ($value['selected'] as $selected) {
 
                     $data[] = [
-                        'id_diaporama'      => $selected,
+                        'id'      => $selected,
                         'active' => $value['active'],
                     ];
                 }
             }
-            if ($this->tableModel->updateBatch($data, 'id_diaporama')) {
+            if ($this->tableModel->updateBatch($data, 'id')) {
                 return $this->respond(['status' => true, 'message' => lang('Js.your_seleted_records_statuses_have_been_updated')], 200);
             } else {
                 return $this->respond(['status' => false, 'database' => true, 'display' => 'modal', 'message' => lang('Js.aucun_enregistrement_effectue')], 200);
@@ -195,7 +195,7 @@ class AdminDiaporamasController extends AdminController
         if ($value = $this->request->getPost('value')) {
             $this->data['id_field'] =  $value['id_field'];
             $this->data['slide'] =  new Slide();
-            $this->data['form'] = $this->tableModel->where('id_diaporama', $value['id_diaporama'])->first();
+            $this->data['form'] = $this->tableModel->where('id', $value['id_diaporama'])->first();
             $html = view($this->get_current_theme_view('__form_section/slide', 'Adnduweb/Ci4_diaporama'), $this->data);
 
             $options = [

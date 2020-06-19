@@ -94,4 +94,4 @@
     </div>
 </div>
 
-<?php if (!empty($form->id_diaporama)) { ?> <?= form_hidden('id_diaporama', $form->id_diaporama); ?> <?php } ?>
+<?php if (!empty($form->id)) { ?> <?= form_hidden('id', $form->id); ?> <?php } ?>

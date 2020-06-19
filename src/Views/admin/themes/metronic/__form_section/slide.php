@@ -3,7 +3,7 @@
     ?>
     <?php $id_field = $id_field ?? $slide->id_field ?? '__i__'; //var_dump($id_field); exit; 
     ?>
-    <?php $id_slide = $id_slide ?? $slide->id_slide ?? '__i__'; //var_dump($id_slide); exit; 
+    <?php $id_slide = $id_slide ?? $slide->id ?? '__i__'; //var_dump($id_slide); exit; 
     ?>
     <?php $order    = ((isset($order)) ? $order : ($slide->id_field != '')) ? $slide->order : '__n__'; ?>
     <?php $media = ($slide->options) ? $slide->getAttrOptionsImage() : 'admin/bundle/images/medias/no-image.png'; ?>

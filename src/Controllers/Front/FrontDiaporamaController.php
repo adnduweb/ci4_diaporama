@@ -8,7 +8,7 @@ use Adnduweb\Ci4_diaporama\Models\DiaporamaModel;
 
 class FrontDiaporamaController extends \App\Controllers\Front\FrontController
 {
-    use \App\Traits\BuilderTrait;
+    use \App\Traits\BuilderModelTrait;
     use \App\Traits\ModuleTrait;
 
     public $name_module = 'pages';
@@ -18,7 +18,7 @@ class FrontDiaporamaController extends \App\Controllers\Front\FrontController
     public function __construct()
     {
         parent::__construct();
-        $this->tableModel  = new PagesModel();
+        $this->tableModel  = new PageModel();
         $this->idModule  = $this->getIdModule();
     }
     public function index()
@@ -46,15 +46,15 @@ class FrontDiaporamaController extends \App\Controllers\Front\FrontController
         $this->data['class'] = $this->data['class'] . ' ' .  str_replace('/', '', $this->data['page']->slug) . ' ' .  str_replace('/', '', $this->data['page']->template);
         $this->data['meta_title'] = $this->data['page']->meta_title;
         $this->data['meta_description'] = $this->data['page']->meta_description;
-        $builders = $this->getBuilderIdItem($this->data['page']->id_page, $this->idModule);
-        if (!empty($builders)) {
-            $this->data['page']->builders = $builders;
+        $builder = $this->getBuilderIdItem($this->data['page']->id_page, $this->idModule);
+        if (!empty($builder)) {
+            $this->data['page']->builder = $builder;
             $temp = [];
-            foreach ($this->data['page']->builders as $builder) {
+            foreach ($this->data['page']->builder as $builder) {
                 $temp[$builder->order] = $builder;
             }
             ksort($temp);
-            $this->data['page']->builders = $temp;
+            $this->data['page']->builder = $temp;
         }
 
         // print_r($this->data['pageContent']); exit;

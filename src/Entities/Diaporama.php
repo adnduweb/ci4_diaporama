@@ -7,11 +7,15 @@ use CodeIgniter\Entity;
 class Diaporama extends Entity
 {
     use \Tatter\Relations\Traits\EntityTrait;
-    protected $table          = 'diaporamas';
-    protected $tableLang      = 'diaporama_lang';
-    protected $tableSlide     = 'diaporama_slide';
-    protected $tableSlideLang = 'diaporama_slide_lang';
-    protected $primaryKey     = 'id_diaporama';
+    use \App\Traits\BuilderEntityTrait;
+    protected $table               = 'diaporamas';
+    protected $tableLang           = 'diaporamas_langs';
+    protected $tableSlide          = 'diaporamas_slides';
+    protected $tableSlideLang      = 'diaporamas_slides_langs';
+    protected $primaryKey          = 'id';
+    protected $primaryKeyLang      = 'diaporama_id';
+    protected $primaryKeySlide     = 'id';
+    protected $primaryKeySlideLang = 'slide_id';
 
     protected $datamap = [];
     /**
@@ -24,9 +28,9 @@ class Diaporama extends Entity
      */
     protected $casts = [];
 
-    public function getId()
+    public function getIdDiaporama()
     {
-        return $this->id_diaporama ?? null;
+        return $this->id ?? null;
     }
     public function getName()
     {
@@ -35,7 +39,7 @@ class Diaporama extends Entity
 
     public function getNameLang(int $id_lang)
     {
-        foreach ($this->diaporama_lang as $lang) {
+        foreach ($this->diaporamas_langs as $lang) {
             if ($id_lang == $lang->id_lang) {
                 return $lang->name ?? null;
             }
@@ -43,28 +47,17 @@ class Diaporama extends Entity
     }
 
 
-    public function _prepareLang()
-    {
-        $lang = [];
-        if (!empty($this->id_diaporama)) {
-            foreach ($this->diaporama_lang as $tabs_lang) {
-                $lang[$tabs_lang->id_lang] = $tabs_lang;
-            }
-        }
-        return $lang;
-    }
-
     public function saveLang(array $data, int $key)
     {
         //print_r($data);
         $db      = \Config\Database::connect();
         $builder = $db->table($this->tableLang);
         foreach ($data as $k => $v) {
-            $this->tableLang =  $builder->where(['id_lang' => $k, 'id_diaporama' => $key])->get()->getRow();
+            $this->tableLang =  $builder->where(['id_lang' => $k, $this->primaryKeyLang => $key])->get()->getRow();
             // print_r($this->tableLang);
             if (empty($this->tableLang)) {
                 $data = [
-                    'id_diaporama'      => $key,
+                    $this->primaryKeyLang      => $key,
                     'id_lang'           => $k,
                     'name'              => $v['name'],
                     'sous_name'         => $v['sous_name'],
@@ -75,7 +68,7 @@ class Diaporama extends Entity
                 $builder->insert($data);
             } else {
                 $data = [
-                    'id_diaporama'      => $this->tableLang->id_diaporama,
+                    $this->primaryKeyLang      => $this->tableLang->{$this->primaryKeyLang},
                     'id_lang'           => $this->tableLang->id_lang,
                     'name'              => $v['name'],
                     'sous_name'         => $v['sous_name'],
@@ -84,7 +77,7 @@ class Diaporama extends Entity
                 ];
                 //print_r($data);
                 $builder->set($data);
-                $builder->where(['id_diaporama' => $this->tableLang->id_diaporama, 'id_lang' => $this->tableLang->id_lang]);
+                $builder->where([$this->primaryKeyLang => $this->tableLang->{$this->primaryKeyLang}, 'id_lang' => $this->tableLang->id_lang]);
                 $builder->update();
             }
         }
@@ -105,11 +98,31 @@ class Diaporama extends Entity
             //On enregistre le slide
             $i = 1;
             foreach ($slides as $slide => $v) {
-                $slideOnly =  $builderSlide->where(['id_field' => $slide, 'id_diaporama' => $diaporama->id_diaporama])->get()->getRow();
+                $slideOnly =  $builderSlide->where(['id_field' => $slide, $this->primaryKeyLang => $diaporama->{$this->primaryKey}])->get()->getRow();
+
+                /** On convertit les images pour le front */
+                $options = json_decode($v['options']);
+                if (!strpos($options->media->format, 'custom') === false) {
+                    $options->media->filename = site_url() . 'uploads' . $options->media->format;
+                    $options->media->format = 'custom';
+                    $pathinfo     = pathinfo($options->media->filename);
+                    $options->media->basename = $pathinfo['basename'];
+                    list($width, $height, $type, $attr) =  getimagesize($options->media->filename);
+                    $options->media->dimensions = ['width' => $width, 'height' => $height];
+                } else {
+
+                    $options->media->format = 'custom';
+                    $pathinfo     = pathinfo($options->media->filename);
+                    $options->media->basename = $pathinfo['basename'];
+                    list($width, $height, $type, $attr) =  getimagesize($options->media->filename);
+                    $options->media->dimensions = ['width' => $width, 'height' => $height];
+                }
+                $v['options'] = json_encode($options);
+
 
                 if (empty($slideOnly)) {
                     $dataSlide = [
-                        'id_diaporama' => $diaporama->id_diaporama,
+                        $this->primaryKeyLang => $diaporama->{$this->primaryKey},
                         'id_field'     => $slide,
                         'options'      => $v['options'],
                         'handle'       => 'slide' . $slide,
@@ -123,10 +136,10 @@ class Diaporama extends Entity
                     if (!empty($id_slide)) {
                         $builderSlidelang = $db->table($this->tableSlideLang);
                         foreach ($v['lang'] as $k => $s) {
-                            $slideLangOnly =  $builderSlidelang->where(['id_slide' => $id_slide, 'id_lang' => $k])->get()->getRow();
+                            $slideLangOnly =  $builderSlidelang->where([$this->primaryKeySlideLang => $id_slide, 'id_lang' => $k])->get()->getRow();
                             if (empty($slideLangOnly)) {
                                 $datalang = [
-                                    'id_slide'        => $id_slide,
+                                    $this->primaryKeySlideLang        => $id_slide,
                                     'id_lang'         => $k,
                                     'name_one'        => $s['name_one'],
                                     'name_two'        => $s['name_two'],
@@ -138,7 +151,7 @@ class Diaporama extends Entity
                                 $builderSlidelang->insert($datalang);
                             } else {
                                 $datalang = [
-                                    'id_slide'        => $id_slide,
+                                    $this->primaryKeySlideLang        => $id_slide,
                                     'id_lang'         => $k,
                                     'name_one'        => $s['name_one'],
                                     'name_two'        => $s['name_two'],
@@ -148,14 +161,14 @@ class Diaporama extends Entity
                                     'slug'            => $s['slug'],
                                 ];
                                 $builderSlidelang->set($datalang);
-                                $builderSlidelang->where(['id_slide' => $id_slide, 'id_lang' => $k]);
+                                $builderSlidelang->where([$this->primaryKeySlideLang => $id_slide, 'id_lang' => $k]);
                                 $builderSlidelang->update();
                             }
                         }
                     }
                 } else {
                     $dataSlide = [
-                        'id_diaporama' => $diaporama->id_diaporama,
+                        $this->primaryKeyLang => $diaporama->{$this->primaryKey},
                         'id_field'     => $slide,
                         'options'      => $v['options'],
                         'handle'       => 'slide' . $slide,
@@ -164,43 +177,45 @@ class Diaporama extends Entity
                         'updated_at'   => date('y-m-d H:i:s')
                     ];
                     $builderSlide->set($dataSlide);
-                    $builderSlide->where(['id_diaporama' => $diaporama->id_diaporama, 'id_field' => $slide]);
+                    $builderSlide->where([$this->primaryKeyLang => $diaporama->{$this->primaryKey}, 'id_field' => $slide]);
                     $builderSlide->update();
 
                     $builderSlidelang = $db->table($this->tableSlideLang);
                     foreach ($v['lang'] as $k => $s) {
-                        $slideLangOnly =  $builderSlidelang->where(['id_slide' => $slideOnly->id_slide, 'id_lang' => $k])->get()->getRow();
+                        // print_r([$this->primaryKeySlideLang => $slideOnly->{$this->primaryKeySlide}, 'id_lang' => $k]);
+                        //exit;
+                        $slideLangOnly =  $builderSlidelang->where([$this->primaryKeySlideLang => $slideOnly->{$this->primaryKeySlide}, 'id_lang' => $k])->get()->getRow();
                         // echo '<pre>';
                         // print_r($slideLangOnly);
                         // echo '</pre>';
                         if (empty($slideLangOnly)) {
                             $datalang = [
-                                'id_slide'        => $slideOnly->id_slide,
-                                'id_lang'         => $k,
-                                'name_one'        => $s['name_one'],
-                                'name_two'        => $s['name_two'],
-                                'description_one' => $s['description_one'],
-                                'description_two' => $s['description_two'],
-                                'bouton'          => $s['bouton'],
-                                'slug'            => $s['slug'],
+                                $this->primaryKeySlideLang => $slideOnly->{$this->primaryKeySlide},
+                                'id_lang'                  => $k,
+                                'name_one'                 => $s['name_one'],
+                                'name_two'                 => $s['name_two'],
+                                'description_one'          => $s['description_one'],
+                                'description_two'          => $s['description_two'],
+                                'bouton'                   => $s['bouton'],
+                                'slug'                     => $s['slug'],
                             ];
 
                             $builderSlidelang->insert($datalang);
                         } else {
                             $datalang = [
-                                'id_slide'        => $slideOnly->id_slide,
-                                'id_lang'         => $k,
-                                'name_one'        => $s['name_one'],
-                                'name_two'        => $s['name_two'],
-                                'description_one' => $s['description_one'],
-                                'description_two' => $s['description_two'],
-                                'bouton'          => $s['bouton'],
-                                'slug'            => $s['slug'],
+                                $this->primaryKeySlideLang => $slideOnly->{$this->primaryKeySlide},
+                                'id_lang'                  => $k,
+                                'name_one'                 => $s['name_one'],
+                                'name_two'                 => $s['name_two'],
+                                'description_one'          => $s['description_one'],
+                                'description_two'          => $s['description_two'],
+                                'bouton'                   => $s['bouton'],
+                                'slug'                     => $s['slug'],
                             ];
 
 
                             $builderSlidelang->set($datalang);
-                            $builderSlidelang->where(['id_slide' => $slideOnly->id_slide, 'id_lang' => $k]);
+                            $builderSlidelang->where([$this->primaryKeySlideLang => $slideOnly->{$this->primaryKeySlide}, 'id_lang' => $k]);
                             $builderSlidelang->update();
                         }
                     }

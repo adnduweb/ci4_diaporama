@@ -12,7 +12,7 @@
         <div class="kt-portlet__head-toolbar">
             <div class="kt-portlet__head-group">
                 <a href="javascript:;" data-ktportlet-tool="toggle" data-field="<?= $field; ?>" class="btn btn-sm btn-icon btn-brand btn-icon-md"><i class="la la-angle-down"></i></a>
-                <a href="javascript:;" data-ktportlet-tool="remove" data-id_builder="<?= isset($builder->id_builder) ? $builder->id_builder : ""; ?>" data-field="<?= $field; ?>" class="btn btn-sm btn-icon btn-warning removePortlet btn-icon-md"><i class="la la-close"></i></a>
+                <a href="javascript:;" data-ktportlet-tool="remove" data-id_builder="<?= isset($builder->id) ? $builder->id : ""; ?>" data-field="<?= $field; ?>" class="btn btn-sm btn-icon btn-warning removePortlet btn-icon-md"><i class="la la-close"></i></a>
             </div>
         </div>
     </div>
@@ -30,9 +30,9 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label><?= lang('Core.by_diapo'); ?></label>
-                        <select required name="builder[<?= $field; ?>][options][id_diaporama]" class="form-control" title="<?= ucfirst(lang('Core.choose_one_of_the_following')); ?>" id="options_diaporama">
+                        <select name="builder[<?= $field; ?>][options][id]" class="form-control" title="<?= ucfirst(lang('Core.choose_one_of_the_following')); ?>" id="options_diaporama">
                             <?php foreach ($diaporamaModel->getAllDiaporamaLight() as $diaporama) { ?>
-                                <option <?= (isset($optionsDiapo->id_diaporama) && $optionsDiapo->id_diaporama == $diaporama->id_diaporama) ? 'selected' : ""; ?> value="<?= $diaporama->id_diaporama; ?>"><?= $diaporama->name; ?></option>
+                                <option <?= (isset($optionsDiapo->id) && $optionsDiapo->id == $diaporama->id) ? 'selected' : ""; ?> value="<?= $diaporama->id; ?>"><?= $diaporama->name; ?></option>
                             <?php } ?>
 
                         </select>
@@ -54,13 +54,13 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label><?= lang('Core.class_css'); ?></label>
-                        <input type="text" name="builder[<?= $field; ?>][class]" class="form-control form_input_label" value="<?= isset($builder->class) ? $builder->class : ""; ?>" data-field="<?= $field; ?>" placeholder="Votre class" />
+                        <input type="text" name="builder[<?= $field; ?>][balise_class]" class="form-control form_input_label" value="<?= isset($builder->balise_class) ? $builder->balise_class : ""; ?>" data-field="<?= $field; ?>" placeholder="Votre class" />
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label><?= lang('Core.id_css'); ?></label>
-                        <input type="text" name="builder[<?= $field; ?>][id]" data-field="<?= $field; ?>" class="form-control form_input_placeholder" value="<?= isset($builder->id) ? $builder->id : ""; ?>" placeholder="Votre id" />
+                        <input type="text" name="builder[<?= $field; ?>][balise_id]" data-field="<?= $field; ?>" class="form-control form_input_placeholder" value="<?= isset($builder->balise_id) ? $builder->balise_id : ""; ?>" placeholder="Votre id" />
                     </div>
                 </div>
 
@@ -94,7 +94,7 @@
                     </div>
                 </div>
                 <?php if ($field != "__field__") { ?>
-                    <?= form_hidden('builder[' . $field . '][id_builder]', $builder->id_builder); ?>
+                    <?= form_hidden('builder[' . $field . '][id]', $builder->id); ?>
                 <?php } ?>
                 <?= form_hidden('builder[' . $field . '][type]', 'diaporamafield'); ?>
                 <?= form_hidden('builder[' . $field . '][id_field]', $field); ?>

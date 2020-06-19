@@ -15,7 +15,7 @@ var KTAppPagesListDatatable = function() {
                                 action: 'list',
                                 value: '',
                                 module: window.btoa('Adnduweb/Ci4_diaporama'),
-                                _id_company: _id_company
+                                _company_id: _company_id
                             }
                         }
                     },

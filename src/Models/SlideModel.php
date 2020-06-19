@@ -9,38 +9,40 @@ class SlideModel extends Model
 {
     use \Tatter\Relations\Traits\ModelTrait;
     use \Adnduweb\Ci4_logs\Traits\AuditsTrait;
-    protected $afterInsert        = ['auditInsert'];
-    protected $afterUpdate        = ['auditUpdate'];
-    protected $afterDelete        = ['auditDelete'];
-    protected $table              = 'diaporama_slide';
-    protected $tableLang          = 'diaporama_slide_lang';
-    protected $with               = ['diaporama_slide_lang'];
-    protected $without            = [];
-    protected $primaryKey         = 'id_slide';
-    protected $returnType         = Slide::class;
-    protected $useSoftDeletes     = false;
-    protected $allowedFields      = ['id_diaporama', 'id_field', 'options', 'handle', 'color_bg', 'order'];
-    protected $useTimestamps      = true;
-    protected $validationRules    = [];
-    protected $validationMessages = [];
-    protected $skipValidation     = false;
+    protected $afterInsert         = ['auditInsert'];
+    protected $afterUpdate         = ['auditUpdate'];
+    protected $afterDelete         = ['auditDelete'];
+    protected $table               = 'diaporamas_slides';
+    protected $tableLang           = 'diaporamas_slides_langs';
+    protected $with                = ['diaporamas_slides_langs'];
+    protected $without             = [];
+    protected $primaryKey          = 'id';
+    protected $primaryKeyLang      = 'slide_id';
+    protected $primaryKeyDiapoLang = 'diaporama_id';
+    protected $returnType          = Slide::class;
+    protected $useSoftDeletes      = false;
+    protected $allowedFields       = ['diaporama_id', 'id_field', 'options', 'handle', 'color_bg', 'order'];
+    protected $useTimestamps       = true;
+    protected $validationRules     = [];
+    protected $validationMessages  = [];
+    protected $skipValidation      = false;
 
     public function __construct()
     {
         parent::__construct();
-        $this->diaporama_slide      = $this->db->table('diaporama_slide');
-        $this->diaporama_slide_lang = $this->db->table('diaporama_slide_lang');
+        $this->diaporamas_slides      = $this->db->table('diaporamas_slides');
+        $this->diaporamas_slides_langs = $this->db->table('diaporamas_slides_langs');
     }
 
     public function getSlidesByDiaporama(int $id_diaporama)
     {
         //echo $this->tableLang ; exit;
         $instance = [];
-        $this->diaporama_slide->select();
-        $this->diaporama_slide->join($this->tableLang, $this->table . '.id_slide = ' . $this->tableLang . '.id_slide');
-        $this->diaporama_slide->where('deleted_at IS NULL AND id_diaporama = ' . $id_diaporama . ' AND id_lang=' . service('settings')->setting_id_lang);
-        $this->diaporama_slide->orderBy($this->table . '.order ASC');
-        $slides = $this->diaporama_slide->get()->getResult();
+        $this->diaporamas_slides->select();
+        $this->diaporamas_slides->join($this->tableLang, $this->table . '.' . $this->primaryKey . ' = ' . $this->tableLang . '.' . $this->primaryKeyLang);
+        $this->diaporamas_slides->where('deleted_at IS NULL AND ' . $this->primaryKeyDiapoLang . ' = ' . $id_diaporama . ' AND id_lang=' . service('switchlanguage')->getIdLocale());
+        $this->diaporamas_slides->orderBy($this->table . '.order ASC');
+        $slides = $this->diaporamas_slides->get()->getResult();
         if (!empty($slides)) {
             foreach ($slides as $slide) {
                 $instance[] = new Slide((array) $slide);

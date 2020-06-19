@@ -13,7 +13,7 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
         // Define default project setting templates
         $rows = [
             [
-                'id_diaporama'              => 1,
+                'id'                        => 1,
                 'active'                    => 1,
                 'handle'                    => 'diapo-1',
                 'dimensions'                => '1920|700',
@@ -27,7 +27,7 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
         ];
         $rowsLang = [
             [
-                'id_diaporama'      => 1,
+                'diaporama_id'      => 1,
                 'id_lang'           => 1,
                 'name'              => 'Welcome to CodeIgniter',
                 'sous_name'         => 'Bonjour',
@@ -41,20 +41,20 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
         //$diaporamas = new DiaporamaModel();
         $db = \Config\Database::connect();
         foreach ($rows as $row) {
-            $page = $db->table('diaporama')->where('id_diaporama', $row['id_diaporama'])->get()->getRow();
+            $page = $db->table('diaporamas')->where('id', $row['id'])->get()->getRow();
             //print_r($page); exit;
             if (empty($page)) {
                 // No setting - add the row
-                $db->table('diaporama')->insert($row);
+                $db->table('diaporamas')->insert($row);
             }
         }
 
         foreach ($rowsLang as $rowLang) {
-            $pagelang = $db->table('diaporama_lang')->where('id_diaporama', $rowLang['id_diaporama'])->get()->getRow();
+            $pagelang = $db->table('diaporamas_langs')->where('diaporama_id', $rowLang['diaporama_id'])->get()->getRow();
 
             if (empty($pagelang)) {
                 // No setting - add the row
-                $db->table('diaporama_lang')->insert($rowLang);
+                $db->table('diaporamas_langs')->insert($rowLang);
             }
         }
 

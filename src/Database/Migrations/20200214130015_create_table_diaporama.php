@@ -14,7 +14,7 @@ class Migration_create_table_diaporama extends Migration
          *
          ************************************************************/
         $fields = [
-            'id_diaporama'              => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'id'                        => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'active'                    => ['type' => 'INT', 'constraint' => 11],
             'handle'                    => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
             'dimensions'                => ['type' => 'VARCHAR', 'constraint' => 48, 'null' => true],
@@ -28,38 +28,35 @@ class Migration_create_table_diaporama extends Migration
         ];
 
         $this->forge->addField($fields);
-        $this->forge->addKey('id_diaporama', true);
-        $this->forge->addKey('created_at');
-        $this->forge->addKey('updated_at');
-        $this->forge->addKey('deleted_at');
-        $this->forge->createTable('diaporama');
+        $this->forge->addKey('id', true);
+        $this->forge->createTable('diaporamas');
 
 
         $fields = [
-            'id_diaporama'      => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
+            'id_diaporama_lang' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'diaporama_id'      => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
             'id_lang'           => ['type' => 'INT', 'constraint' => 11],
             'name'              => ['type' => 'VARCHAR', 'constraint' => 255],
             'sous_name'         => ['type' => 'VARCHAR', 'constraint' => 255],
             'description_short' => ['type' => 'TEXT'],
+            'slug'              => ['type' => 'VARCHAR', 'constraint' => 255],
             'url_bouton_diapo'  => ['type' => 'VARCHAR', 'constraint' => 255],
         ];
 
         $this->forge->addField($fields);
-        // $this->forge->addKey(['id_item', 'id_lang'], false, true);
-        $this->forge->addKey('id_item');
+        $this->forge->addKey('id_diaporama_lang', true);
         $this->forge->addKey('id_lang');
-        $this->forge->addForeignKey('id_diaporama', 'diaporama', 'id_diaporama', false, 'CASCADE');
-        $this->forge->createTable('diaporama_lang', true);
+        $this->forge->addForeignKey('diaporama_id', 'diaporamas', 'id', false, 'CASCADE');
+        $this->forge->createTable('diaporamas_langs', true);
 
         /************************************************************
          *
          * Slide
          *
          ************************************************************/
-
         $fields = [
-            'id_slide'     => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            'id_diaporama' => ['type' => 'INT', 'constraint' => 11],
+            'id'           => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'diaporama_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
             'id_field'     => ['type' => 'BIGINT', 'constraint' => 16],
             'options'      => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
             'handle'       => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
@@ -69,40 +66,39 @@ class Migration_create_table_diaporama extends Migration
             'updated_at'   => ['type' => 'DATETIME', 'null' => true],
             'deleted_at'   => ['type' => 'DATETIME', 'null' => true],
         ];
-
+        //$this->forge->addField(['id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true]]);
         $this->forge->addField($fields);
-        $this->forge->addKey('id_slide', true);
-        $this->forge->addKey('created_at');
-        $this->forge->addKey('updated_at');
-        $this->forge->addKey('deleted_at');
-        $this->forge->createTable('diaporama_slide');
+        $this->forge->addKey('id', true);
+        $this->forge->addForeignKey('diaporama_id', 'diaporamas', 'id', false, 'CASCADE');
+        $this->forge->createTable('diaporamas_slides');
 
 
         $fields = [
-            'id_slide'        => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
-            'id_lang'         => ['type' => 'INT', 'constraint' => 11],
-            'name_one'        => ['type' => 'VARCHAR', 'constraint' => 255],
-            'name_two'        => ['type' => 'VARCHAR', 'constraint' => 255],
-            'description_one' => ['type' => 'TEXT'],
-            'description_two' => ['type' => 'TEXT'],
-            'bouton'          => ['type' => 'VARCHAR', 'constraint' => 255],
-            'slug'            => ['type' => 'VARCHAR', 'constraint' => 255],
+            'id_diaporama_slide_lang' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            'slide_id'                => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'default' => 0],
+            'id_lang'                 => ['type' => 'INT', 'constraint' => 11],
+            'name_one'                => ['type' => 'VARCHAR', 'constraint' => 255],
+            'name_two'                => ['type' => 'VARCHAR', 'constraint' => 255],
+            'description_one'         => ['type' => 'TEXT'],
+            'description_two'         => ['type' => 'TEXT'],
+            'bouton'                  => ['type' => 'VARCHAR', 'constraint' => 255],
+            'slug'                    => ['type' => 'VARCHAR', 'constraint' => 255],
         ];
 
         $this->forge->addField($fields);
-        $this->forge->addKey('id_slide');
+        $this->forge->addKey('id_diaporama_slide_lang', true);
         $this->forge->addKey('id_lang');
-        $this->forge->addForeignKey('id_slide', 'diaporama_slide', 'id_slide', false, 'CASCADE');
-        $this->forge->createTable('diaporama_slide_lang', true);
+        $this->forge->addForeignKey('slide_id', 'diaporamas_slides', 'id', false, 'CASCADE');
+        $this->forge->createTable('diaporamas_slides_langs', true);
     }
 
     //--------------------------------------------------------------------
 
     public function down()
     {
-        $this->forge->dropTable('diaporama');
-        $this->forge->dropTable('diaporama_lang');
-        $this->forge->dropTable('diaporama_slide');
-        $this->forge->dropTable('diaporama_slide_lang');
+        $this->forge->dropTable('diaporamas');
+        $this->forge->dropTable('diaporamas_langs');
+        $this->forge->dropTable('diaporamas_slides');
+        $this->forge->dropTable('diaporamas_slides_langs');
     }
 }

@@ -8,9 +8,11 @@ use App\Entities\Media;
 class Slide extends Entity
 {
     use \Tatter\Relations\Traits\EntityTrait;
-    protected $table          = 'diaporama_slide';
-    protected $tableLang      = 'diaporama_slide_lang';
-    protected $primaryKey     = 'id_slide';
+    use \App\Traits\BuilderEntityTrait;
+    protected $table          = 'diaporamas_slides';
+    protected $tableLang      = 'diaporamas_slides_langs';
+    protected $primaryKey     = 'id';
+    protected $primaryKeyLang = 'slide_id';
 
     protected $datamap = [];
     /**
@@ -23,9 +25,9 @@ class Slide extends Entity
      */
     protected $casts = [];
 
-    public function getId()
+    public function getIdSlide()
     {
-        return $this->id_slide ?? null;
+        return $this->id ?? null;
     }
     public function getNameOne()
     {
@@ -47,7 +49,7 @@ class Slide extends Entity
             $options = json_decode($this->attributes['options']);
             $db      = \Config\Database::connect();
             $builder = $db->table('medias');
-            $image =  $builder->where(['id_media' => $options->media->id_media])->get()->getRow();
+            $image =  $builder->where(['id' => $options->media->id])->get()->getRow();
             $media = new Media((array) $image);
             return $media->namePathFile('thumbnail');
         }
@@ -60,17 +62,5 @@ class Slide extends Entity
             return json_decode($this->attributes['options']);
         }
         return null;
-    }
-
-
-    public function _prepareLang()
-    {
-        $lang = [];
-        if (!empty($this->id_slide)) {
-            foreach ($this->diaporama_slide_lang as $tabs_lang) {
-                $lang[$tabs_lang->id_lang] = $tabs_lang;
-            }
-        }
-        return $lang;
     }
 }
