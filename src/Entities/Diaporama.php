@@ -103,6 +103,7 @@ class Diaporama extends Entity
                 /** On convertit les images pour le front */
                 $options = json_decode($v['options']);
                 if (!strpos($options->media->format, 'custom') === false) {
+
                     $options->media->filename = site_url() . 'uploads' . $options->media->format;
                     $options->media->format = 'custom';
                     $pathinfo     = pathinfo($options->media->filename);
@@ -110,16 +111,24 @@ class Diaporama extends Entity
                     list($width, $height, $type, $attr) =  getimagesize($options->media->filename);
                     $options->media->dimensions = ['width' => $width, 'height' => $height];
                 } else {
-
-                    $options->media->format = 'custom';
-                    $pathinfo     = pathinfo($options->media->filename);
-                    $options->media->basename = $pathinfo['basename'];
-                    list($width, $height, $type, $attr) =  getimagesize($options->media->filename);
-                    $options->media->dimensions = ['width' => $width, 'height' => $height];
+                    if ($options->media->format == 'original') {
+                        $options->media->format = 'original';
+                        //$options->media->filename = site_url() . 'uploads' . $options->media->format;
+                        $pathinfo     = pathinfo($options->media->filename);
+                        $options->media->basename = $pathinfo['basename'];
+                        list($width, $height, $type, $attr) =  getimagesize($options->media->filename);
+                        $options->media->dimensions = ['width' => $width, 'height' => $height];
+                    } else {
+                        $options->media->format = 'custom';
+                        $pathinfo     = pathinfo($options->media->filename);
+                        $options->media->basename = $pathinfo['basename'];
+                        list($width, $height, $type, $attr) =  getimagesize($options->media->filename);
+                        $options->media->dimensions = ['width' => $width, 'height' => $height];
+                    }
                 }
                 $v['options'] = json_encode($options);
-
-
+                // print_r($options);
+                // exit;
                 if (empty($slideOnly)) {
                     $dataSlide = [
                         $this->primaryKeyLang => $diaporama->{$this->primaryKey},

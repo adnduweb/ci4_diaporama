@@ -96,6 +96,8 @@ class AdminDiaporamasController extends AdminController
         $diaporama = new Diaporama($this->request->getPost());
         $diaporama->active = isset($diaporama->active) ? 1 : 0;
         $diaporama->transparent_mask = isset($diaporama->transparent_mask) ? 1 : 0;
+        $diaporama->force_height = isset($diaporama->force_height) ? 1 : 0;
+        $diaporama->center_img = isset($diaporama->center_img) ? 1 : 0;
         $diaporama->bouton_diapo = isset($diaporama->bouton_diapo) ? 1 : 0;
         $this->lang = $this->request->getPost('lang');
 
@@ -130,6 +132,8 @@ class AdminDiaporamasController extends AdminController
         $diaporama = new Diaporama($this->request->getPost());
         $diaporama->active = isset($diaporama->active) ? 1 : 0;
         $diaporama->transparent_mask = isset($diaporama->transparent_mask) ? 1 : 0;
+        $diaporama->force_height = isset($diaporama->force_height) ? 1 : 0;
+        $diaporama->center_img = isset($diaporama->center_img) ? 1 : 0;
         $diaporama->bouton_diapo = isset($diaporama->bouton_diapo) ? 1 : 0;
         $diaporama->handle = uniforme(trim($this->request->getPost('handle')));
 

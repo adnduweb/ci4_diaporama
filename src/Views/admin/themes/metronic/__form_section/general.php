@@ -74,6 +74,32 @@
     </div>
 </div>
 
+<div class="form-group form-group-sm row">
+    <label class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.force_height')); ?></label>
+    <div class="col-lg-9 col-xl-6">
+        <span class="kt-switch kt-switch--icon">
+            <label>
+                <input type="checkbox" <?= ($form->force_height == true) ? 'checked="checked"' : ''; ?> name="force_height" value="1">
+                <span></span>
+            </label>
+        </span>
+    </div>
+</div>
+
+<div class="form-group form-group-sm row">
+    <label class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.center_img')); ?></label>
+    <div class="col-lg-9 col-xl-6">
+        <span class="kt-switch kt-switch--icon">
+            <label>
+                <input type="checkbox" <?= ($form->center_img == true) ? 'checked="checked"' : ''; ?> name="center_img" value="1">
+                <span></span>
+            </label>
+        </span>
+    </div>
+</div>
+
+
+
 
 <div class="form-group form-group-sm row">
     <label class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.bouton_diapo')); ?></label>

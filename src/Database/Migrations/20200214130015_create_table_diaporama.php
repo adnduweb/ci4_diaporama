@@ -20,6 +20,8 @@ class Migration_create_table_diaporama extends Migration
             'dimensions'                => ['type' => 'VARCHAR', 'constraint' => 48, 'null' => true],
             'transparent_mask'          => ['type' => 'INT', 'constraint' => 11, 'default' => 0],
             'transparent_mask_color_bg' => ['type' => 'VARCHAR', 'constraint' => 48, 'null' => true],
+            'force_height'              => ['type' => 'INT', 'constraint' => 11, 'default' => 0],
+            'center_img'                => ['type' => 'INT', 'constraint' => 11, 'default' => 0],
             'bouton_diapo'              => ['type' => 'VARCHAR', 'constraint' => 255],
             'order'                     => ['type' => 'INT', 'constraint' => 11],
             'created_at'                => ['type' => 'DATETIME', 'null' => true],

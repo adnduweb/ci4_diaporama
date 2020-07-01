@@ -8,8 +8,8 @@ use Adnduweb\Ci4_diaporama\Entities\Slide;
 
 class DiaporamaModel extends Model
 {
-    use \Tatter\Relations\Traits\ModelTrait;
-    use \Adnduweb\Ci4_logs\Traits\AuditsTrait;
+    use \Tatter\Relations\Traits\ModelTrait, \Adnduweb\Ci4_logs\Traits\AuditsTrait, \App\Models\BaseModel;
+
     protected $afterInsert         = ['auditInsert'];
     protected $afterUpdate         = ['auditUpdate'];
     protected $afterDelete         = ['auditDelete'];
@@ -24,102 +24,89 @@ class DiaporamaModel extends Model
     protected $primaryKeySlideLang = 'slide_id';
     protected $returnType          = Diaporama::class;
     protected $useSoftDeletes      = true;
-    protected $allowedFields       = ['id_parent', 'active', 'handle', 'dimensions', 'transparent_mask', 'transparent_mask_color_bg', 'bouton_diapo', 'order'];
+    protected $allowedFields       = ['id_parent', 'active', 'handle', 'dimensions', 'transparent_mask', 'transparent_mask_color_bg', 'force_height', 'center_img', 'bouton_diapo', 'order'];
     protected $useTimestamps       = true;
     protected $validationRules     = [];
     protected $validationMessages  = [];
     protected $skipValidation      = false;
+    protected $searchKtDatatable  = ['name', 'description_short', 'created_at'];
 
     public function __construct()
     {
         parent::__construct();
-        $this->diaporamas_table            = $this->db->table('diaporamas');
-        $this->diaporamas_table_lang       = $this->db->table('diaporamas_langs');
-        $this->diaporamas_table_slide      = $this->db->table('diaporamas_slides');
-        $this->diaporamas_table_slide_lang = $this->db->table('diaporamas_slides_langs');
+        $this->builder            = $this->db->table('diaporamas');
+        $this->builder_lang       = $this->db->table('diaporamas_langs');
+        $this->builder_slide      = $this->db->table('diaporamas_slides');
+        $this->builder_slide_lang = $this->db->table('diaporamas_slides_langs');
     }
 
     public function getListByMenu()
     {
         $instance = [];
-        $this->diaporamas_table->select($this->table . '.id_diaporama, slug, name, created_at');
-        $this->diaporamas_table->join($this->tableLang, $this->table . '.' . $this->primaryKey . ' = ' . $this->tableLang . '.' . $this->primaryKeyLang);
-        $this->diaporamas_table->where('deleted_at IS NULL AND id_lang = ' . service('switchlanguage')->getIdLocale());
-        $this->diaporamas_table->orderBy($this->table . '.id_diaporama DESC');
-        $diaporama = $this->diaporamas_table->get()->getResult();
+        $this->builder->select($this->table . '.id_diaporama, slug, name, created_at');
+        $this->builder->join($this->tableLang, $this->table . '.' . $this->primaryKey . ' = ' . $this->tableLang . '.' . $this->primaryKeyLang);
+        $this->builder->where('deleted_at IS NULL AND id_lang = ' . service('switchlanguage')->getIdLocale());
+        $this->builder->orderBy($this->table . '.id_diaporama DESC');
+        $diaporama = $this->builder->get()->getResult();
         if (!empty($diaporama)) {
             foreach ($diaporama as $page) {
                 $instance[] = new Diaporama((array) $page);
             }
         }
-        //echo $this->diaporamas_table->getCompiledSelect(); exit;
+        //echo $this->builder->getCompiledSelect(); exit;
         return $instance;
     }
 
     public function getAllList(int $page, int $perpage, array $sort, array $query)
     {
-        $this->diaporamas_table->select();
-        $this->diaporamas_table->select('created_at as date_create_at');
-        $this->diaporamas_table->join($this->tableLang, $this->table . '.' . $this->primaryKey . ' = ' . $this->tableLang . '.' . $this->primaryKeyLang);
-        if (isset($query[0]) && is_array($query)) {
-            $this->diaporamas_table->where('deleted_at IS NULL AND (name LIKE "%' . $query[0] . '%" OR description_short LIKE "%' . $query[0] . '%") AND id_lang = ' . service('switchlanguage')->getIdLocale());
-            $this->diaporamas_table->limit(0, $page);
-        } else {
-            $this->diaporamas_table->where('deleted_at IS NULL AND id_lang = ' . service('switchlanguage')->getIdLocale());
-            $page = ($page == '1') ? '0' : (($page - 1) * $perpage);
-            $this->diaporamas_table->limit($perpage, $page);
+        $diaporamas =  $this->getBaseAllList($page, $perpage, $sort, $query, $this->searchKtDatatable);
+        // In va chercher les b_categories_table
+        if (!empty($diaporamas)) {
+            $i = 0;
+            foreach ($diaporamas as $diaporama) {
+                $LangueDisplay = [];
+                foreach (service('switchlanguage')->getArrayLanguesSupported() as $k => $v) {
+                    if ($diaporama->id_lang == $v) {
+                        //Existe = 
+                        $LangueDisplay[$k] = true;
+                    } else {
+                        $LangueDisplay[$k] = false;
+                    }
+                }
+                $diaporamas[$i]->languages = $LangueDisplay;
+                $i++;
+            }
         }
 
-
-        $this->diaporamas_table->orderBy($sort['field'] . ' ' . $sort['sort']);
-
-        $groupsRow = $this->diaporamas_table->get()->getResult();
-
-        //echo $this->diaporamas_table->getCompiledSelect(); exit;
-        return $groupsRow;
+        //echo $this->b_posts_table->getCompiledSelect(); exit;
+        return $diaporamas;
     }
 
-    public function getAllCount(array $sort, array $query)
-    {
-        $this->diaporamas_table->select($this->table . '.' . $this->primaryKey);
-        $this->diaporamas_table->join($this->tableLang, $this->table . '.' . $this->primaryKey . ' = ' . $this->tableLang . '.' . $this->primaryKeyLang);
-        if (isset($query[0]) && is_array($query)) {
-            $this->diaporamas_table->where('deleted_at IS NULL AND (name LIKE "%' . $query[0] . '%" OR description_short LIKE "%' . $query[0] . '%") AND id_lang = ' . service('switchlanguage')->getIdLocale());
-        } else {
-            $this->diaporamas_table->where('deleted_at IS NULL AND id_lang = ' . service('switchlanguage')->getIdLocale());
-        }
-
-        $this->diaporamas_table->orderBy($sort['field'] . ' ' . $sort['sort']);
-
-        $diaporama = $this->diaporamas_table->get();
-        //echo $this->diaporamas_table->getCompiledSelect(); exit;
-        return $diaporama->getResult();
-    }
 
     public function getAllDiaporamaLight()
     {
-        $this->diaporamas_table->select($this->table . '.' . $this->primaryKey . ', name');
-        $this->diaporamas_table->join($this->tableLang, $this->table . '.' . $this->primaryKey . ' = ' . $this->tableLang . '.' . $this->primaryKeyLang);
-        $this->diaporamas_table->where('deleted_at IS NULL AND id_lang = ' . service('switchlanguage')->getIdLocale());
-        return $this->diaporamas_table->get()->getResult();
+        $this->builder->select($this->table . '.' . $this->primaryKey . ', name');
+        $this->builder->join($this->tableLang, $this->table . '.' . $this->primaryKey . ' = ' . $this->tableLang . '.' . $this->primaryKeyLang);
+        $this->builder->where('deleted_at IS NULL AND id_lang = ' . service('switchlanguage')->getIdLocale());
+        return $this->builder->get()->getResult();
     }
 
     public function getDiaporamaFront(int $id_diaporama, int $lang)
     {
         $instance['originalSettings'] = [];
         $instance['originalSlides'] = [];
-        $this->diaporamas_table->select();
-        $this->diaporamas_table->join($this->tableLang, $this->table . '.' . $this->primaryKey . ' = ' . $this->tableLang . '.' . $this->primaryKeyLang);
-        $this->diaporamas_table->where('deleted_at IS NULL AND ' . $this->table . '.' . $this->primaryKey . ' = ' . $id_diaporama . ' AND id_lang = ' . $lang);
-        $instance['originalSettings'] = $this->diaporamas_table->get()->getRow();
+        $this->builder->select();
+        $this->builder->join($this->tableLang, $this->table . '.' . $this->primaryKey . ' = ' . $this->tableLang . '.' . $this->primaryKeyLang);
+        $this->builder->where('deleted_at IS NULL AND ' . $this->table . '.' . $this->primaryKey . ' = ' . $id_diaporama . ' AND id_lang = ' . $lang);
+        $instance['originalSettings'] = $this->builder->get()->getRow();
         if (!empty($instance['originalSettings'])) {
-            $this->diaporamas_table_slide->select();
-            $this->diaporamas_table_slide->join($this->tableSlideLang, $this->tableSlide . '.' . $this->primaryKey . ' = ' . $this->tableSlideLang . '.' . $this->primaryKeySlideLang);
-            $this->diaporamas_table_slide->where('deleted_at IS NULL AND ' . $this->tableSlide . '.' . $this->primaryKeyLang . '=' . $instance['originalSettings']->{$this->primaryKey} . ' AND id_lang=' . $lang);
-            $this->diaporamas_table_slide->orderBy($this->tableSlide . '.order ASC');
-            // echo $this->diaporamas_table_slide->getCompiledSelect();
+            $this->builder_slide->select();
+            $this->builder_slide->join($this->tableSlideLang, $this->tableSlide . '.' . $this->primaryKey . ' = ' . $this->tableSlideLang . '.' . $this->primaryKeySlideLang);
+            $this->builder_slide->where('deleted_at IS NULL AND ' . $this->tableSlide . '.' . $this->primaryKeyLang . '=' . $instance['originalSettings']->{$this->primaryKey} . ' AND id_lang=' . $lang);
+            $this->builder_slide->orderBy($this->tableSlide . '.order ASC');
+            // echo $this->builder_slide->getCompiledSelect();
             // exit;
-            $slides = $this->diaporamas_table_slide->get()->getResult();
+            $slides = $this->builder_slide->get()->getResult();
             // print_r($slides); exit;
             if (!empty($slides)) {
                 foreach ($slides as $slide) {
