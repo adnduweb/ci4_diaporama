@@ -20,6 +20,7 @@ class SlideModel extends Model
     protected $primaryKeyLang      = 'slide_id';
     protected $primaryKeyDiapoLang = 'diaporama_id';
     protected $returnType          = Slide::class;
+    protected $localizeFile        = 'Adnduweb\Ci4_diaporama\Models\SlideModel';
     protected $useSoftDeletes      = false;
     protected $allowedFields       = ['diaporama_id', 'id_field', 'options', 'handle', 'color_bg', 'order'];
     protected $useTimestamps       = true;

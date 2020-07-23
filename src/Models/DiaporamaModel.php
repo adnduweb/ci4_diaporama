@@ -23,13 +23,14 @@ class DiaporamaModel extends Model
     protected $primaryKeyLang      = 'diaporama_id';
     protected $primaryKeySlideLang = 'slide_id';
     protected $returnType          = Diaporama::class;
+    protected $localizeFile        = 'Adnduweb\Ci4_diaporama\Models\DiaporamaModel';
     protected $useSoftDeletes      = true;
     protected $allowedFields       = ['id_parent', 'active', 'handle', 'dimensions', 'transparent_mask', 'transparent_mask_color_bg', 'force_height', 'center_img', 'bouton_diapo', 'order'];
     protected $useTimestamps       = true;
     protected $validationRules     = [];
     protected $validationMessages  = [];
     protected $skipValidation      = false;
-    protected $searchKtDatatable  = ['name', 'description_short', 'created_at'];
+    protected $searchKtDatatable   = ['name', 'description_short', 'created_at'];
 
     public function __construct()
     {
@@ -43,10 +44,10 @@ class DiaporamaModel extends Model
     public function getListByMenu()
     {
         $instance = [];
-        $this->builder->select($this->table . '.id_diaporama, slug, name, created_at');
+        $this->builder->select($this->table . '.' . $this->primaryKey . ', slug, name, created_at');
         $this->builder->join($this->tableLang, $this->table . '.' . $this->primaryKey . ' = ' . $this->tableLang . '.' . $this->primaryKeyLang);
         $this->builder->where('deleted_at IS NULL AND id_lang = ' . service('switchlanguage')->getIdLocale());
-        $this->builder->orderBy($this->table . '.id_diaporama DESC');
+        $this->builder->orderBy($this->table . '.' . $this->primaryKey . ' DESC');
         $diaporama = $this->builder->get()->getResult();
         if (!empty($diaporama)) {
             foreach ($diaporama as $page) {

@@ -62,18 +62,17 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
 
         $rowsTabs = [
             [
-                'id_parent'         => 17,
-                'depth'             => 2,
-                'left'              => 33,
-                'right'             => 34,
-                'position'          => 1,
-                'section'           => 0,
-                'module'            => 'Adnduweb\Ci4_diaporama',
-                'class_name'        => 'AdminDiaporamas',
-                'active'            =>  1,
-                'icon'              => '',
-                'slug'             => 'diaporamas',
-                'name_controller'       => ''
+                'id_parent'       => 17,
+                'depth'           => 2,
+                'left'            => 33,
+                'right'           => 34,
+                'position'        => 1,
+                'section'         => 0,
+                'namespace'       => 'Adnduweb\Ci4_diaporama',
+                'class_name'      => 'diaporama',
+                'active'          => 1,
+                'icon'            => '',
+                'slug'            => 'diaporamas',
             ],
         ];
 
@@ -89,7 +88,7 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
         ];
 
         foreach ($rowsTabs as $row) {
-            $tab = $db->table('tabs')->where('class_name', $row['class_name'])->get()->getRow();
+            $tab = $db->table('tabs')->where('class_name', $row['class_name'])->where('namespace', $row['namespace'])->get()->getRow();
             //print_r($tab); exit;
             if (empty($tab)) {
                 // No setting - add the row
@@ -111,22 +110,22 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
          */
         $rowsPermissionsdiaporamas = [
             [
-                'name'              => 'Diaporamas::views',
+                'name'              => 'Diaporama::view',
                 'description'       => 'Voir les diaporamas',
                 'is_natif'          => '0',
             ],
             [
-                'name'              => 'Diaporamas::create',
+                'name'              => 'Diaporama::create',
                 'description'       => 'Créer des diaporamas',
                 'is_natif'          => '0',
             ],
             [
-                'name'              => 'Diaporamas::edit',
+                'name'              => 'Diaporama::edit',
                 'description'       => 'Modifier les diaporamas',
                 'is_natif'          => '0',
             ],
             [
-                'name'              => 'Diaporamas::delete',
+                'name'              => 'Diaporama::delete',
                 'description'       => 'Supprimer des diaporamas',
                 'is_natif'          => '0',
             ]
@@ -143,7 +142,7 @@ class DiaporamaSeeder extends \CodeIgniter\Database\Seeder
 
         //Gestion des module
         $rowsModulediaporamas = [
-            'name'       => 'diaporamas',
+            'name'       => 'diaporama',
             'namespace'  => 'Adnduweb\Ci4_diaporama',
             'active'     => 1,
             'version'    => '1.0.2',

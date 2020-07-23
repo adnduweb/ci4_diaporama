@@ -102,6 +102,11 @@ class Diaporama extends Entity
 
                 /** On convertit les images pour le front */
                 $options = json_decode($v['options']);
+
+                // On vérifie qu'il y a bine une image 
+                if(empty($options))
+                    return false;
+
                 if (!strpos($options->media->format, 'custom') === false) {
 
                     $options->media->filename = site_url() . 'uploads' . $options->media->format;

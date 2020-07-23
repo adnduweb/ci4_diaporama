@@ -11,6 +11,7 @@
         <div class="kt-portlet__head">
             <div class="kt-portlet__head-label">
                 <h3 class="kt-portlet__head-title">
+                    <div class="handle-croix"> <i class="icon-xl la la-reorder"></i></div>
                     <span class="image_une">
                         <img src="<?= base_url(); ?>/<?= $media; ?>" alt="image">
                     </span>

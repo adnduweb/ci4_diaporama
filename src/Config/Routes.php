@@ -1,11 +1,11 @@
 <?php
 
 $routes->group(CI_SITE_AREA, ['namespace' => '\Adnduweb\Ci4_diaporama\Controllers\Admin', 'filter' => 'apiauth'], function ($routes) {
-    $routes->get('(:any)/diaporamas', 'AdminDiaporamasController::renderViewList', ['as' => 'diaporama-index']);
-    $routes->get('(:any)/diaporamas/edit/(:any)', 'AdminDiaporamasController::renderForm/$2');
-    $routes->post('(:any)/diaporamas/edit/(:any)', 'AdminDiaporamasController::postProcess/$2');
-    $routes->get('(:any)/diaporamas/add', 'AdminDiaporamasController::renderForm');
-    $routes->post('(:any)/diaporamas/add', 'AdminDiaporamasController::postProcess');
+    $routes->get(config('Diaporama')->urlMenuAdmin . '/diaporamas', 'AdminDiaporamasController::renderViewList', ['as' => 'diaporama-index']);
+    $routes->get(config('Diaporama')->urlMenuAdmin . '/diaporamas/edit/(:any)', 'AdminDiaporamasController::renderForm/$2');
+    $routes->post(config('Diaporama')->urlMenuAdmin . '/diaporamas/edit/(:any)', 'AdminDiaporamasController::postProcess/$2');
+    $routes->get(config('Diaporama')->urlMenuAdmin . '/diaporamas/add', 'AdminDiaporamasController::renderForm');
+    $routes->post(config('Diaporama')->urlMenuAdmin . '/diaporamas/add', 'AdminDiaporamasController::postProcess');
 });
 
 $locale = '/';

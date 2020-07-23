@@ -3,8 +3,6 @@
 namespace Adnduweb\Ci4_diaporama\Controllers\Admin;
 
 use App\Controllers\Admin\AdminController;
-use CodeIgniter\HTTP\RequestInterface;
-use CodeIgniter\HTTP\ResponseInterface;
 
 use App\Libraries\AssetsBO;
 use App\Libraries\Tools;
@@ -18,37 +16,95 @@ use Adnduweb\Ci4_diaporama\Models\SlideModel;
 class AdminDiaporamasController extends AdminController
 {
 
-    use \App\Traits\ModuleTrait;
-    use \Adnduweb\Ci4_diaporama\DiaporamaTrait;
+    use \App\Traits\ModuleTrait, \Adnduweb\Ci4_diaporama\DiaporamaTrait;
+
+     /**
+     *  Module Object
+     */
+    public $module = true;
 
     /**
-     *  * @var Module */
-    public $module      = true;
-    public $name_module = 'diaporamas';
+     * name controller
+     */
+    public $controller = 'diaporama';
+
+    /**
+     * Localize slug
+     */
+    public $pathcontroller  = '/diaporamas';
+
+    /**
+     * Localize namespace
+     */
+    public $namespace = 'Adnduweb/Ci4_diaporama';
+
+    /**
+     * Id Module
+     */
     protected $idModule;
-    public $controller = 'diaporamas';
-    public $item = 'diaporama';
-    public $type = 'Adnduweb/Ci4_diaporama';
-    public $pathcontroller  = '/public/diaporamas';
+
+    /**
+     * Localize slug
+     */
+    public $dirList  = 'diaporamas';
+
+    /**
+     * Display default list column
+     */
     public $fieldList = 'name';
+
+    /**
+     * Bouton add
+     */
     public $add = true;
+
+    /**
+     * Display Multilangue
+     */
     public $multilangue = true;
 
+    /**
+     * Event fake data
+     */
+    public $fake = false;
 
+    /**
+     * Update item List
+     */
+    public $toolbarUpdate = true;
+
+    /**
+     * @var \App\Models\FormModel
+     */
+    public $tableModel;
+
+    /**
+     * Instance Object
+     */
+    protected $instances = [];
+
+
+    /**
+     * Page constructor.
+     *
+     */
     public function __construct()
     {
         parent::__construct();
         $this->controller_type = 'admindiaporamas';
-        $this->module          = "diaporamas";
         $this->tableModel      = new DiaporamaModel();
         $this->tableSlideModel = new SlideModel();
         $this->idModule        = $this->getIdModule();
+
+        $this->data['paramJs']['baseSegmentAdmin'] = config('Diaporama')->urlMenuAdmin;
+
+        $this->pathcontroller  = '/'.config('Diaporama')->urlMenuAdmin . $this->pathcontroller;
     }
 
     public function renderViewList()
     {
         //print_r(Service('currency')->Taxe());exit;
-        AssetsBO::add_js([$this->get_current_theme_view('controllers/' . $this->controller . '/js/list.js', 'default')]);
+        AssetsBO::add_js([$this->get_current_theme_view('controllers/' . $this->dirList . '/js/list.js', 'default')]);
         $parent =  parent::renderViewList();
         if (is_object($parent) && $parent->getStatusCode() == 307) {
             return $parent;
@@ -64,7 +120,7 @@ class AdminDiaporamasController extends AdminController
 
     public function renderForm($id = null)
     {
-        AssetsBO::add_js([$this->get_current_theme_view('controllers/' . $this->controller . '/js/outils.js', 'default')]);
+        AssetsBO::add_js([$this->get_current_theme_view('controllers/' . $this->dirList . '/js/outils.js', 'default')]);
         AssetsBO::add_js([$this->get_current_theme_view('controllers/medias/js/manager.js', 'default')]);
 
         if (is_null($id)) {

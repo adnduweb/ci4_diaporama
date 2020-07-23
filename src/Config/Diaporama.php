@@ -5,4 +5,7 @@ use CodeIgniter\Config\BaseConfig;
 class Diaporama extends BaseConfig
 {
   public $paginationPerPage = 10;
+
+  public $urlMenuAdmin = 'public';
+  
 }
