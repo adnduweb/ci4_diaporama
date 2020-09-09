@@ -128,7 +128,7 @@ class AdminDiaporamasController extends AdminController
         } else {
             $this->data['form'] = $this->tableModel->where('id', $id)->first();
             if (empty($this->data['form'])) {
-                Tools::set_message('danger', lang('Core.not_{0}_exist', [$this->item]), lang('Core.warning_error'));
+                Tools::set_message('danger', lang('Core.not_{0}_exist', [$this->controller]), lang('Core.warning_error'));
                 return redirect()->to('/' . env('CI_SITE_AREA') . '/public/diaporamas');
             }
             $this->data['form']->slides =  $this->getSlidesByDiaporama($id);

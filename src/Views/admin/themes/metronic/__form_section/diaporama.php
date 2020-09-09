@@ -16,6 +16,6 @@
             <?php } ?>
         <?php } ?>
     </div>
-    <button type='button' class="btn btn-bold btn-sm btn-label-brand" id='add'><i class="la la-plus"></i> <?= lang('Core.add'); ?></button>
+    <button type='button' class="btn btn-primary btn-sm" id='add'><i class="la la-plus"></i> <?= lang('Core.add'); ?></button>
 
 <?php } ?>

@@ -1,14 +1,14 @@
-<div class="row">
+<!-- <div class="row">
     <label class="col-xl-3"></label>
     <div class="col-lg-9 col-xl-6">
         <h3 class="kt-section__title kt-section__title-sm"><?= lang('Core.info_taxe'); ?>:</h3>
     </div>
-</div>
+</div> -->
 
 <div class="form-group form-group-sm row">
     <label class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.activation')); ?></label>
     <div class="col-lg-9 col-xl-6">
-        <span class="kt-switch kt-switch--icon">
+        <span class="switch switch-icon">
             <label>
                 <input type="checkbox" <?= ($form->active == true) ? 'checked="checked"' : ''; ?> name="active" value="1">
                 <span></span>
@@ -57,7 +57,7 @@
 <div class="form-group form-group-sm row">
     <label class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.transparent_mask')); ?></label>
     <div class="col-lg-9 col-xl-6">
-        <span class="kt-switch kt-switch--icon">
+        <span class="switch switch-icon">
             <label>
                 <input type="checkbox" <?= ($form->transparent_mask == true) ? 'checked="checked"' : ''; ?> name="transparent_mask" value="1">
                 <span></span>
@@ -77,7 +77,7 @@
 <div class="form-group form-group-sm row">
     <label class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.force_height')); ?></label>
     <div class="col-lg-9 col-xl-6">
-        <span class="kt-switch kt-switch--icon">
+        <span class="switch switch-icon">
             <label>
                 <input type="checkbox" <?= ($form->force_height == true) ? 'checked="checked"' : ''; ?> name="force_height" value="1">
                 <span></span>
@@ -89,7 +89,7 @@
 <div class="form-group form-group-sm row">
     <label class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.center_img')); ?></label>
     <div class="col-lg-9 col-xl-6">
-        <span class="kt-switch kt-switch--icon">
+        <span class="switch switch-icon">
             <label>
                 <input type="checkbox" <?= ($form->center_img == true) ? 'checked="checked"' : ''; ?> name="center_img" value="1">
                 <span></span>
@@ -104,7 +104,7 @@
 <div class="form-group form-group-sm row">
     <label class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.bouton_diapo')); ?></label>
     <div class="col-lg-9 col-xl-6">
-        <span class="kt-switch kt-switch--icon">
+        <span class="switch switch-icon">
             <label>
                 <input type="checkbox" <?= ($form->bouton_diapo == true) ? 'checked="checked"' : ''; ?> name="bouton_diapo" value="1">
                 <span></span>

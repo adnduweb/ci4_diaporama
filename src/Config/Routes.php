@@ -2,8 +2,8 @@
 
 $routes->group(CI_SITE_AREA, ['namespace' => '\Adnduweb\Ci4_diaporama\Controllers\Admin', 'filter' => 'apiauth'], function ($routes) {
     $routes->get(config('Diaporama')->urlMenuAdmin . '/diaporamas', 'AdminDiaporamasController::renderViewList', ['as' => 'diaporama-index']);
-    $routes->get(config('Diaporama')->urlMenuAdmin . '/diaporamas/edit/(:any)', 'AdminDiaporamasController::renderForm/$2');
-    $routes->post(config('Diaporama')->urlMenuAdmin . '/diaporamas/edit/(:any)', 'AdminDiaporamasController::postProcess/$2');
+    $routes->get(config('Diaporama')->urlMenuAdmin . '/diaporamas/edit/(:any)', 'AdminDiaporamasController::renderForm/$1');
+    $routes->post(config('Diaporama')->urlMenuAdmin . '/diaporamas/edit/(:any)', 'AdminDiaporamasController::postProcess/$1');
     $routes->get(config('Diaporama')->urlMenuAdmin . '/diaporamas/add', 'AdminDiaporamasController::renderForm');
     $routes->post(config('Diaporama')->urlMenuAdmin . '/diaporamas/add', 'AdminDiaporamasController::postProcess');
 });

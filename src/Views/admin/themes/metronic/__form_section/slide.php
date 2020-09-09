@@ -20,13 +20,13 @@
             </div>
             <div class="kt-portlet__head-toolbar">
                 <div class="kt-portlet__head-group">
-                    <a href="javascript:;" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-brand btn-icon-md"><i class="la la-angle-down"></i></a>
+                    <a href="javascript:;" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-primary btn-icon-md"><i class="la la-angle-down"></i></a>
                     <a href="javascript:;" data-id-slide="<?= $id_slide; ?>" data-ktportlet-tool="remove" class="btn btn-sm btn-icon btn-warning btn-icon-md removePortlet"><i class="la la-close"></i></a>
                 </div>
-            </div>
+            </div> 
         </div>
         <div class="kt-portlet__body" style="display: none;overflow: hidden;padding-top: 0px;padding-bottom: 0px;">
-            <div class="kt-portlet__content">
+            <div class="kt-portlet__content" style="overflow: hidden;">
                 <div class="row_diaporama kt-shape-bg-color-1">
                     <div class="form-group row fileImageUpload">
                         <label for="picture_one" class="col-xl-3 col-lg-3 col-form-label"><?= ucfirst(lang('Core.Slide ')); ?>* : </label>
